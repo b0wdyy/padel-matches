@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Match {
+  id        Int           @id @default(autoincrement())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  comments  Comment[]
+  players   MatchPlayer[]
+}
+
+model Player {
+  id        Int           @id @default(autoincrement())
+  name      String
+  level     Float
+  matches   MatchPlayer[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model MatchPlayer {
+  id        Int      @id @default(autoincrement())
+  matchId   Int
+  playerId  Int
+  player    Player   @relation(fields: [playerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  match     Match    @relation(fields: [matchId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  matchId   Int
+  match     Match    @relation(fields: [matchId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  content   String
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
