@@ -1,4 +1,4 @@
 export enum CommentType {
-  POSITIVE = "POSITIVE",
-  NEGATIVE = "NEGATIVE",
+  POSITIVE = 'POSITIVE',
+  NEGATIVE = 'NEGATIVE',
 }

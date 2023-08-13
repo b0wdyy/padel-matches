@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
-import { CommentType } from "../app/models/comment";
+import { PrismaClient } from '@prisma/client'
+import { faker } from '@faker-js/faker'
+import { CommentType } from '../app/models/comment'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 function createComment() {
   return {
@@ -11,14 +11,14 @@ function createComment() {
       CommentType.POSITIVE,
       CommentType.NEGATIVE,
     ]),
-  };
+  }
 }
 
 function createPlayer() {
   return {
     name: `${faker.person.firstName()} ${faker.person.lastName()}`,
     level: +faker.number.float({ min: 0, max: 10 }).toFixed(2),
-  };
+  }
 }
 
 async function createPlayers() {
@@ -28,13 +28,13 @@ async function createPlayers() {
       .map(async () => {
         await prisma.player.create({
           data: createPlayer(),
-        });
-      }),
-  );
+        })
+      })
+  )
 }
 
 async function createMatches() {
-  const players = await prisma.player.findMany();
+  const players = await prisma.player.findMany()
 
   await Promise.all(
     Array(3)
@@ -42,6 +42,7 @@ async function createMatches() {
       .map(async () => {
         await prisma.match.create({
           data: {
+            title: faker.lorem.sentence(),
             players: {
               create: players.map((player) => ({
                 playerId: player.id,
@@ -51,22 +52,22 @@ async function createMatches() {
               create: [createComment(), createComment(), createComment()],
             },
           },
-        });
-      }),
-  );
+        })
+      })
+  )
 }
 
 async function seed() {
-  console.log("-------------- SEEDING 🌱 --------------");
+  console.log('-------------- SEEDING 🌱 --------------')
 
-  await createPlayers();
-  await createMatches();
+  await createPlayers()
+  await createMatches()
 
-  console.log("-------------- DONE ✅ --------------");
+  console.log('-------------- DONE ✅ --------------')
 }
 
 seed().catch((e) => {
-  console.error(e);
-  prisma.$disconnect();
-  process.exit(1);
-});
+  console.error(e)
+  prisma.$disconnect()
+  process.exit(1)
+})
