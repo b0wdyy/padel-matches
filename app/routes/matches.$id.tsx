@@ -1,5 +1,4 @@
 import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
-import { getMatch } from '~/controllers/match.server'
 import invariant from 'tiny-invariant'
 import {
   isRouteErrorResponse,
@@ -7,8 +6,11 @@ import {
   useRouteError,
 } from '@remix-run/react'
 import { typedjson, useTypedLoaderData } from 'remix-typedjson'
+
+import { getMatch } from '~/controllers/match.server'
 import { CommentType } from '~/models/comment'
 import { PlayerList } from '~/components/player-list'
+import { CommentList } from '~/components/comments/list'
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.id, 'id is required')
@@ -64,11 +66,10 @@ export default function Match() {
           {data.match.comments.positive.length === 0 ? (
             <p>Geen positieve comments</p>
           ) : (
-            <ul>
-              {data.match.comments.positive.map((comment) => (
-                <li key={comment.id}>{comment.content}</li>
-              ))}
-            </ul>
+            <CommentList
+              type={CommentType.POSITIVE}
+              comments={data.match.comments.positive}
+            />
           )}
         </section>
 
@@ -78,11 +79,10 @@ export default function Match() {
           {data.match.comments.positive.length === 0 ? (
             <p>Geen negatieve comments</p>
           ) : (
-            <ul>
-              {data.match.comments.negative.map((comment) => (
-                <li key={comment.id}>{comment.content}</li>
-              ))}
-            </ul>
+            <CommentList
+              type={CommentType.NEGATIVE}
+              comments={data.match.comments.negative}
+            />
           )}
         </section>
       </section>
