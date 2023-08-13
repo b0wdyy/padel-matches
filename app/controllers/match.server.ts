@@ -22,7 +22,11 @@ export async function getMatch(id: number) {
     },
     include: {
       comments: true,
-      players: true,
+      players: {
+        select: {
+          player: true,
+        },
+      },
     },
   })
 

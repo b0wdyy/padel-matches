@@ -1,8 +1,14 @@
-import { type LoaderArgs } from '@remix-run/node'
+import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
 import { getMatch } from '~/controllers/match.server'
 import invariant from 'tiny-invariant'
-import { isRouteErrorResponse, useRouteError } from '@remix-run/react'
+import {
+  isRouteErrorResponse,
+  useParams,
+  useRouteError,
+} from '@remix-run/react'
 import { typedjson, useTypedLoaderData } from 'remix-typedjson'
+import { CommentType } from '~/models/comment'
+import { PlayerList } from '~/components/player-list'
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.id, 'id is required')
@@ -12,21 +18,81 @@ export async function loader({ params }: LoaderArgs) {
     throw new Response('Not Found', { status: 404 })
   }
 
-  return typedjson({ match })
+  const mappedMatch = {
+    ...match,
+    comments: {
+      negative: match.comments.filter(
+        (comment) => comment.type === CommentType.NEGATIVE
+      ),
+      positive: match.comments.filter(
+        (comment) => comment.type === CommentType.POSITIVE
+      ),
+    },
+  }
+
+  return typedjson({ match: mappedMatch })
+}
+
+export const meta: V2_MetaFunction = ({ params }) => {
+  return [
+    { title: `My padel matches | Match ${params.id}` },
+    { name: 'description', content: 'Database for my padel matches' },
+  ]
 }
 
 export default function Match() {
   const data = useTypedLoaderData<typeof loader>()
 
   return (
-    <div>
-      <p>{data.match.title}</p>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold">{data.match.title}</h1>
+
+      <section className="mt-8">
+        <h2 className="mb-4 text-2xl font-bold">Players</h2>
+
+        <PlayerList players={data.match.players} />
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-2 text-2xl font-bold">Comments</h2>
+
+        <p>Sommige comments over hoe de match is gegaan.</p>
+
+        <section className="mt-4">
+          <h3 className="mb-2 text-xl font-bold">Positieve comments</h3>
+
+          {data.match.comments.positive.length === 0 ? (
+            <p>Geen positieve comments</p>
+          ) : (
+            <ul>
+              {data.match.comments.positive.map((comment) => (
+                <li key={comment.id}>{comment.content}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="mt-4">
+          <h3 className="mb-2 text-xl font-bold">Negatieve comments</h3>
+
+          {data.match.comments.positive.length === 0 ? (
+            <p>Geen negatieve comments</p>
+          ) : (
+            <ul>
+              {data.match.comments.negative.map((comment) => (
+                <li key={comment.id}>{comment.content}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </section>
     </div>
   )
 }
 
 export function ErrorBoundary() {
   const error = useRouteError()
+  const params = useParams()
 
   if (error instanceof Error) {
     return <div>An unexpected error occurred: {error.message}</div>
@@ -37,7 +103,7 @@ export function ErrorBoundary() {
   }
 
   if (error.status === 404) {
-    return <div>Note not found</div>
+    return <div>Match with id "{params.id}" not found</div>
   }
 
   return <div>An unexpected error occurred: {error.statusText}</div>
