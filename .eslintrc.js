@@ -10,6 +10,10 @@ module.exports = {
       'error',
       {
         'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
         pathGroups: [
           {
             pattern: 'react',

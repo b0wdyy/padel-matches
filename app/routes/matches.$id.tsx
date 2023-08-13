@@ -1,16 +1,16 @@
 import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
-import invariant from 'tiny-invariant'
 import {
   isRouteErrorResponse,
   useParams,
   useRouteError,
 } from '@remix-run/react'
 import { typedjson, useTypedLoaderData } from 'remix-typedjson'
+import invariant from 'tiny-invariant'
 
+import { CommentList } from '~/components/comments/list'
+import { PlayerList } from '~/components/player-list'
 import { getMatch } from '~/controllers/match.server'
 import { CommentType } from '~/models/comment'
-import { PlayerList } from '~/components/player-list'
-import { CommentList } from '~/components/comments/list'
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.id, 'id is required')
