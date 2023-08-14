@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker'
+import { PrismaClient } from '@prisma/client'
+
 import { CommentType } from '../app/models/comment'
 
 const prisma = new PrismaClient()
@@ -43,6 +44,19 @@ async function createMatches() {
         await prisma.match.create({
           data: {
             title: faker.lorem.sentence(),
+            location: {
+              create: {
+                city: faker.location.city(),
+                name: 'Lommelse T.C.',
+                street: faker.location.street(),
+                number: faker.helpers
+                  .rangeToNumber({ min: 1, max: 100 })
+                  .toString(),
+                image: faker.image.urlPicsumPhotos(),
+                latitude: +faker.location.latitude(),
+                longitude: +faker.location.longitude(),
+              },
+            },
             players: {
               create: players.map((player) => ({
                 playerId: player.id,

@@ -1,18 +1,28 @@
+import { Button, Flex, Title } from '@mantine/core'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'
 
 export default function Index() {
   return (
-    <div className="grid h-screen w-screen place-items-center">
-      <h1>Improving my padel. One game at a time.</h1>
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      h="100vh"
+      w="100vw"
+    >
+      <Title>Improving my padel. One game at a time.</Title>
 
-      <Link
+      <Button
+        variant="subtle"
+        color="violet"
+        mt={12}
+        component={Link}
         to="/matches"
-        className="flex items-center gap-2 rounded-lg p-4 transition-colors hover:bg-slate-200 focus:bg-slate-200"
+        rightIcon={<ArrowRightIcon />}
       >
-        Watch all matches
-        <ArrowRightIcon />
-      </Link>
-    </div>
+        View all matches
+      </Button>
+    </Flex>
   )
 }

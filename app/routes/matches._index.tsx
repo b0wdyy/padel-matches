@@ -1,4 +1,6 @@
+import { Box, Flex, Stack, Title } from '@mantine/core'
 import { typedjson, useTypedLoaderData } from 'remix-typedjson'
+
 import { MatchItem } from '~/components/match-item'
 import { prisma } from '~/db.server'
 
@@ -24,16 +26,16 @@ export default function Matches() {
   const data = useTypedLoaderData<typeof loader>()
 
   return (
-    <div className="grid h-screen w-screen place-items-center">
-      <div>
-        <h1 className="mb-4 mt-8 text-4xl font-bold">Matches</h1>
+    <Flex h="100vh" w="100vw" justify="center" align="center">
+      <Box>
+        <Title mb={16}>Matches</Title>
 
-        <div className="flex flex-col gap-4">
+        <Stack>
           {data.matches.map((match) => (
             <MatchItem key={match.id} match={match} />
           ))}
-        </div>
-      </div>
-    </div>
+        </Stack>
+      </Box>
+    </Flex>
   )
 }

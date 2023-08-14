@@ -22,6 +22,7 @@ export async function getMatch(id: number) {
     },
     include: {
       comments: true,
+      location: true,
       players: {
         select: {
           player: true,
@@ -37,6 +38,14 @@ export async function createMatch(data: CreateMatchDTO) {
   const match = await prisma.match.create({
     data: {
       title: data.title,
+      location: {
+        connectOrCreate: {
+          where: {
+            id: data.location.id,
+          },
+          create: data.location,
+        },
+      },
       comments: {
         create: data.comments,
       },

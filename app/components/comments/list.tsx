@@ -1,3 +1,4 @@
+import { Box, List, ThemeIcon } from '@mantine/core'
 import type { Comment } from '@prisma/client'
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons'
 
@@ -10,24 +11,26 @@ type CommentListProps = {
 
 export const CommentList: React.FC<CommentListProps> = ({ comments, type }) => {
   return (
-    <ul>
+    <List>
       {comments.map((comment) => (
-        <li className="flex gap-4" key={comment.id}>
-          <div
-            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
-              type === CommentType.POSITIVE ? 'bg-green-200' : 'bg-red-200'
-            }`}
-          >
-            {type === CommentType.POSITIVE ? (
-              <PlusIcon className="text-green-600" />
+        <List.Item
+          icon={
+            comment.type === CommentType.POSITIVE ? (
+              <ThemeIcon color="teal" size={24} radius="xl">
+                <PlusIcon />
+              </ThemeIcon>
             ) : (
-              <MinusIcon className="text-red-600" />
-            )}
-          </div>
-
-          <span>{comment.content}</span>
-        </li>
+              <ThemeIcon color="red" size={24} radius="xl">
+                <MinusIcon />
+              </ThemeIcon>
+            )
+          }
+          className="flex gap-4"
+          key={comment.id}
+        >
+          <Box component="span">{comment.content}</Box>
+        </List.Item>
       ))}
-    </ul>
+    </List>
   )
 }

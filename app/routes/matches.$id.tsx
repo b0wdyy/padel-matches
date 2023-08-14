@@ -1,3 +1,4 @@
+import { Box, Container, Text, Title } from '@mantine/core'
 import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
 import {
   isRouteErrorResponse,
@@ -8,7 +9,7 @@ import { typedjson, useTypedLoaderData } from 'remix-typedjson'
 import invariant from 'tiny-invariant'
 
 import { CommentList } from '~/components/comments/list'
-import { PlayerList } from '~/components/player-list'
+import { PlayerList } from '~/components/players/list'
 import { getMatch } from '~/controllers/match.server'
 import { CommentType } from '~/models/comment'
 
@@ -46,47 +47,51 @@ export default function Match() {
   const data = useTypedLoaderData<typeof loader>()
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold">{data.match.title}</h1>
+    <Container>
+      <Title>{data.match.title}</Title>
 
-      <section className="mt-8">
-        <h2 className="mb-4 text-2xl font-bold">Players</h2>
+      <Box mt={32}>
+        <Title order={2}>Players</Title>
 
         <PlayerList players={data.match.players} />
-      </section>
+      </Box>
 
-      <section className="mt-8">
-        <h2 className="mb-2 text-2xl font-bold">Comments</h2>
+      <Box component="section" mt={32}>
+        <Title order={2}>Comments</Title>
 
-        <p>Sommige comments over hoe de match is gegaan.</p>
+        <Text>Sommige comments over hoe de match is gegaan.</Text>
 
-        <section className="mt-4">
-          <h3 className="mb-2 text-xl font-bold">Positieve comments</h3>
+        <Box component="section" mt={16}>
+          <Title order={3} mb={8}>
+            Positieve comments
+          </Title>
 
           {data.match.comments.positive.length === 0 ? (
-            <p>Geen positieve comments</p>
+            <Text>Geen positieve comments</Text>
           ) : (
             <CommentList
               type={CommentType.POSITIVE}
               comments={data.match.comments.positive}
             />
           )}
-        </section>
+        </Box>
 
-        <section className="mt-4">
-          <h3 className="mb-2 text-xl font-bold">Negatieve comments</h3>
+        <Box component="section" mt={16}>
+          <Title order={3} mb={8}>
+            Negatieve comments
+          </Title>
 
           {data.match.comments.positive.length === 0 ? (
-            <p>Geen negatieve comments</p>
+            <Text>Geen negatieve comments</Text>
           ) : (
             <CommentList
               type={CommentType.NEGATIVE}
               comments={data.match.comments.negative}
             />
           )}
-        </section>
-      </section>
-    </div>
+        </Box>
+      </Box>
+    </Container>
   )
 }
 

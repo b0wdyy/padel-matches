@@ -1,3 +1,4 @@
+import { Box, Card, Flex, Text } from '@mantine/core'
 import type { Match } from '@prisma/client'
 import { DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'
@@ -14,17 +15,21 @@ type MatchItemProps = {
 
 export const MatchItem: React.FC<MatchItemProps> = ({ match }) => {
   return (
-    <Link to={match.id.toString()} className="rounded-lg bg-slate-200 p-4">
-      <div className="flex items-center justify-between gap-8">
-        <div>
-          <p>{match.title}</p>
-          <p className="text-sm text-gray-400">
+    <Card
+      component={Link}
+      to={match.id.toString()}
+      className="rounded-lg bg-slate-200 p-4"
+    >
+      <Flex align="center" justify="space-between" gap={8}>
+        <Box>
+          <Text>{match.title}</Text>
+          <Text size="sm" color="dimmed">
             {match.players.map((player) => player.player.name).join(', ')}
-          </p>
-        </div>
+          </Text>
+        </Box>
 
         <DoubleArrowRightIcon />
-      </div>
-    </Link>
+      </Flex>
+    </Card>
   )
 }
