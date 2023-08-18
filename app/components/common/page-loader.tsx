@@ -8,13 +8,13 @@ export const PageLoader: React.FC = () => {
       h="100vh"
       w="100vw"
       pos="fixed"
-      bg="orange.1"
+      bg="gray.3"
       top={0}
       sx={{
         zIndex: 9999,
       }}
     >
-      <Loader size={64} color="gray" />
+      <Loader size={64} color="gray.8" />
     </Flex>
   )
 }

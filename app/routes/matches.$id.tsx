@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Box, Button, Container, Flex, Text, Title } from '@mantine/core'
 import { Pencil2Icon } from '@radix-ui/react-icons'
@@ -51,12 +51,19 @@ export const meta: V2_MetaFunction = ({ params }) => {
 export default function Match() {
   const data = useTypedLoaderData<typeof loader>()
   const [params] = useSearchParams()
+  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
-    console.log('hoi', params.get('status'))
+    if (params.get('status') === 'edit') {
+      setIsEditing(true)
+    } else {
+      setIsEditing(false)
+    }
   }, [params])
 
-  return (
+  return isEditing ? (
+    <p>We editing this bitch</p>
+  ) : (
     <Container py={32}>
       <Title
         display="flex"
