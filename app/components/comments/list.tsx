@@ -14,6 +14,7 @@ export const CommentList: React.FC<CommentListProps> = ({ comments, type }) => {
     <List>
       {comments.map((comment) => (
         <List.Item
+          mb={16}
           icon={
             comment.type === CommentType.POSITIVE ? (
               <ThemeIcon color="teal" size={24} radius="xl">

@@ -1,4 +1,4 @@
-import { Box, Container, Text, Title } from '@mantine/core'
+import { Box, Container, Flex, Text, Title } from '@mantine/core'
 import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
 import {
   isRouteErrorResponse,
@@ -47,49 +47,61 @@ export default function Match() {
   const data = useTypedLoaderData<typeof loader>()
 
   return (
-    <Container>
+    <Container py={32}>
       <Title>{data.match.title}</Title>
 
       <Box mt={32}>
-        <Title order={2}>Players</Title>
+        <Title mb={8} order={2}>
+          Players
+        </Title>
 
         <PlayerList players={data.match.players} />
       </Box>
 
       <Box component="section" mt={32}>
-        <Title order={2}>Comments</Title>
+        <Title order={2} mb={8}>
+          Comments
+        </Title>
 
         <Text>Sommige comments over hoe de match is gegaan.</Text>
 
-        <Box component="section" mt={16}>
-          <Title order={3} mb={8}>
-            Positieve comments
-          </Title>
+        <Flex gap={32} mt={24}>
+          <Box>
+            <Title order={3} mb={8}>
+              Positieve comments
+            </Title>
 
-          {data.match.comments.positive.length === 0 ? (
-            <Text>Geen positieve comments</Text>
-          ) : (
-            <CommentList
-              type={CommentType.POSITIVE}
-              comments={data.match.comments.positive}
-            />
-          )}
-        </Box>
+            {data.match.comments.positive.length === 0 ? (
+              <Text>Geen positieve comments</Text>
+            ) : (
+              <CommentList
+                type={CommentType.POSITIVE}
+                comments={data.match.comments.positive}
+              />
+            )}
+          </Box>
 
-        <Box component="section" mt={16}>
-          <Title order={3} mb={8}>
-            Negatieve comments
-          </Title>
+          <Box component="section" mt={16}>
+            <Title order={3} mb={8}>
+              Negatieve comments
+            </Title>
 
-          {data.match.comments.positive.length === 0 ? (
-            <Text>Geen negatieve comments</Text>
-          ) : (
-            <CommentList
-              type={CommentType.NEGATIVE}
-              comments={data.match.comments.negative}
-            />
-          )}
-        </Box>
+            {data.match.comments.positive.length === 0 ? (
+              <Text>Geen negatieve comments</Text>
+            ) : (
+              <CommentList
+                type={CommentType.NEGATIVE}
+                comments={data.match.comments.negative}
+              />
+            )}
+          </Box>
+        </Flex>
+      </Box>
+
+      <Box>
+        <Title order={2}>Location</Title>
+
+        <Text>Gespeeld {data.match.location.city}</Text>
       </Box>
     </Container>
   )
