@@ -26,7 +26,7 @@ export default function Matches() {
   const data = useTypedLoaderData<typeof loader>()
 
   return (
-    <Flex h="100vh" w="100vw" justify="center" align="center">
+    <Flex justify="center" align="center" mt={64}>
       <Box>
         <Title mb={16}>Matches</Title>
 

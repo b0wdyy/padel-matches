@@ -1,9 +1,14 @@
-import { Box, Container, Flex, Text, Title } from '@mantine/core'
+import { useEffect } from 'react'
+
+import { Box, Button, Container, Flex, Text, Title } from '@mantine/core'
+import { Pencil2Icon } from '@radix-ui/react-icons'
 import type { V2_MetaFunction, LoaderArgs } from '@remix-run/node'
 import {
+  Link,
   isRouteErrorResponse,
   useParams,
   useRouteError,
+  useSearchParams,
 } from '@remix-run/react'
 import { typedjson, useTypedLoaderData } from 'remix-typedjson'
 import invariant from 'tiny-invariant'
@@ -45,10 +50,33 @@ export const meta: V2_MetaFunction = ({ params }) => {
 
 export default function Match() {
   const data = useTypedLoaderData<typeof loader>()
+  const [params] = useSearchParams()
+
+  useEffect(() => {
+    console.log('hoi', params.get('status'))
+  }, [params])
 
   return (
     <Container py={32}>
-      <Title>{data.match.title}</Title>
+      <Title
+        display="flex"
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        {data.match.title}
+
+        <Button
+          leftIcon={<Pencil2Icon />}
+          variant="light"
+          color="blue"
+          component={Link}
+          to="?status=edit"
+        >
+          Edit
+        </Button>
+      </Title>
 
       <Box mt={32}>
         <Title mb={8} order={2}>
@@ -101,7 +129,7 @@ export default function Match() {
       <Box>
         <Title order={2}>Location</Title>
 
-        <Text>Gespeeld {data.match.location.city}</Text>
+        <Text>Gespeeld in {data.match.location.city}</Text>
       </Box>
     </Container>
   )
